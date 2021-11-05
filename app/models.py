@@ -15,12 +15,14 @@ class Link(BaseModel):
     id: str
     original: str
     short: str
+    transitions_count_short: int = 0
 
     def __init__(self, *args, **kwargs):
         if args and type(args[0]) is list:
             kwargs['id'] = args[0][0]
             kwargs['original'] = args[0][1]
             kwargs['short'] = args[0][2]
+            kwargs['transitions_count_short'] = args[0][3]
             args = []
 
         if not kwargs.get('id'):
@@ -31,7 +33,7 @@ class Link(BaseModel):
 
     @property
     def data_to_save(self):
-        return [self.id, self.original, self.short]
+        return [self.id, self.original, self.short, self.transitions_count_short]
 
     def generate_new_short(self):
         self.short = generate_random_string(8)

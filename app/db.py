@@ -1,4 +1,7 @@
 import tarantool
+from pydantic import parse_obj_as
+from pydantic.types import List
+
 import models
 
 
@@ -10,6 +13,17 @@ class Store:
 
     def get_space(self, space_name: str):
         return self.connection.space(space_name)
+
+    def get_all_links_in_json(self):
+        try:
+            data = list(self.link_space.select())
+            if data:
+                objects = [models.Link(item).json() for item in data]
+                return objects
+            else:
+                return []
+        except:
+            return []
 
     def get_link(self, pk: str):
         pk = str(pk)
@@ -38,3 +52,6 @@ class Store:
                 instance.generate_new_short()
                 continue
         raise tarantool.error.DatabaseError("Can't create unique short link")
+
+    def update_link(self, instance: models.Link):
+        self.link_space.replace(instance.data_to_save)

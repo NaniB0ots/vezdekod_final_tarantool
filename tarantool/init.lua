@@ -6,7 +6,8 @@ local function init()
     link:format({
              {name = 'id', type = 'string'},
              {name = 'original', type = 'string'},
-             {name = 'short', type = 'string'}
+             {name = 'short', type = 'string'},
+             {name = 'transitions_count_short', type = 'integer'}
     })
 
     link:create_index('primary', {

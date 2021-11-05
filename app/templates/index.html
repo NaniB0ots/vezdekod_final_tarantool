@@ -32,6 +32,10 @@
             </div>
         </div>
 
+        <div id="links">
+
+        </div>
+
     </div>
 </div>
 
@@ -68,6 +72,41 @@
         document.getElementById('qr_code').src = `data:image/png;base64,${result.qr_code}`;
 
     }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        let response = await fetch('/links/');
+        let result = await response.json();
+        console.log(result)
+        let links = document.createElement('div')
+
+        let table_html = `
+                    <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Сокращенная ссылка</th>
+                  <th scope="col">Оригинальная ссылка</th>
+                  <th scope="col">Количество переходов по сокращенной ссылке</th>
+                </tr>
+              </thead>
+              <tbody>`
+
+        result.forEach(function (item, i, arr) {
+            item = JSON.parse(item)
+            table_html += `
+                <tr>
+                  <td>${item.short}</td>
+                  <td>${item.original}</td>
+                  <td>${item.transitions_count_short}</td>
+                </tr>
+            `
+        });
+
+        table_html += `</tbody></table>`
+
+        links.innerHTML = table_html
+
+        document.getElementsByClassName('content')[0].append(links)
+    });
 
 </script>
 

@@ -48,9 +48,21 @@ def set_link():
         return jsonify({'original_link': 'Обязательное поле'}), 400
 
 
+@app.route('/links/', methods=['GET'])
+def get_counters():
+    return jsonify(db.get_all_links_in_json())
+
+
+
 @app.route('/<short>/', methods=['GET'])
 def get_link(short: str):
     link = db.get_link_by_short(short)
+    try:
+        link.transitions_count_short += 1
+        db.update_link(link)
+    except:
+        pass
+
     if link:
         return redirect(link.original)
     else:
