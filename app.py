@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, render_template
 from flask import jsonify
 import models
 from db import Store
@@ -16,7 +16,7 @@ def set_link():
     if request_data and request_data.get('original_link'):
         original_link = request_data['original_link']
         link = db.create_link(models.Link(original=original_link))
-        return HOST_URL + link.short
+        return jsonify(HOST_URL + link.short)
     else:
         return jsonify({'original_link': 'Обязательное поле'}), 400
 
@@ -28,6 +28,11 @@ def get_link(short: str):
         return redirect(link.original)
     else:
         return 'Ссылка не найдена', 404
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
