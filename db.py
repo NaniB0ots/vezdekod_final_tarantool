@@ -23,4 +23,11 @@ class Store:
             return {}
 
     def create_link(self, instance: models.Link):
-        self.tester.insert(instance.data_to_save)
+        for _ in range(5):
+            try:
+                self.tester.insert(instance.data_to_save)
+                return instance
+            except tarantool.error.DatabaseError:
+                instance.generate_new_short()
+                continue
+        raise tarantool.error.DatabaseError("Can't create unique short link")

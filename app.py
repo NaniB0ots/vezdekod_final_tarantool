@@ -19,8 +19,11 @@ def get(pk: int):
 
 @app.route('/create/')
 def create():
-    db.create_link(models.Link(original='test1.com', short='short1.com'))
-    return 'ok'
+    link = db.create_link(models.Link(original='test2.com'))
+    print(link)
+    data = dict(link)
+
+    return data
 
 
 if __name__ == '__main__':
