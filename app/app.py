@@ -7,10 +7,26 @@ import models
 from db import Store
 import qrcode
 
+from os import environ
+
+HOST_URL = environ.get('HOST_URL')
+DB_URL = environ.get('DB_URL')
+DB_PORT = environ.get('DB_PORT')
+
+if not HOST_URL:
+    HOST_URL = 'http://127.0.0.1:5000/'
+
+if not DB_URL:
+    DB_URL = 'localhost'
+
+if not DB_PORT:
+    DB_PORT = 3301
+
+print(HOST_URL, DB_URL, DB_PORT)
+
 app = Flask(__name__)
 
-db = Store()
-HOST_URL = 'http://127.0.0.1:5000/'
+db = Store(url=DB_URL, port=DB_PORT)
 
 
 @app.route('/set/', methods=['POST'])

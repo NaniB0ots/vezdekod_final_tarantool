@@ -3,8 +3,8 @@ import models
 
 
 class Store:
-    def __init__(self):
-        self.connection = tarantool.connect('localhost', 3301)
+    def __init__(self, url: str, port: int):
+        self.connection = tarantool.connect(url, port)
 
         self.link_space = self.connection.space('link')
 
