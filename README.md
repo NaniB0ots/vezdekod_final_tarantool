@@ -33,6 +33,8 @@ Response [200]:
    }
 ```
 
+![image](https://user-images.githubusercontent.com/56492378/140519304-5868c4cc-755f-45b4-8753-54a765698e7c.png)
+
 
 **GET** `http://tarantool.698865-cs07173.tmweb.ru/<random_string>/`
 
