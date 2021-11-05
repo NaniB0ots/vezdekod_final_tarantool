@@ -6,14 +6,14 @@ class Store:
     def __init__(self):
         self.connection = tarantool.connect('localhost', 3301)
 
-        self.tester = self.connection.space('link')
+        self.link_space = self.connection.space('link')
 
     def get_space(self, space_name: str):
         return self.connection.space(space_name)
 
     def get_link(self, pk: str):
         pk = str(pk)
-        data = self.tester.select(pk)
+        data = self.link_space.select(pk)
         if len(data) == 1:
 
             return models.Link(data[0])
@@ -22,10 +22,17 @@ class Store:
         else:
             return {}
 
+    def get_link_by_short(self, short: str):
+        data = self.link_space.select(short, index='short_index')
+        if data:
+            return models.Link(list(data)[0])
+        else:
+            return {}
+
     def create_link(self, instance: models.Link):
         for _ in range(5):
             try:
-                self.tester.insert(instance.data_to_save)
+                self.link_space.insert(instance.data_to_save)
                 return instance
             except tarantool.error.DatabaseError:
                 instance.generate_new_short()

@@ -1,29 +1,33 @@
-import uuid
-
-from flask import Flask
-
+from flask import Flask, request, redirect
+from flask import jsonify
 import models
 from db import Store
 
 app = Flask(__name__)
 
 db = Store()
+HOST_URL = 'http://127.0.0.1:5000/'
 
 
-@app.route('/get/<int:pk>/')
-def get(pk: int):
-    test = db.get_link(pk)
-    print(test)
-    return dict(test)
+@app.route('/set/', methods=['POST'])
+def set_link():
+    request_data = request.get_json()
+
+    if request_data and request_data.get('original_link'):
+        original_link = request_data['original_link']
+        link = db.create_link(models.Link(original=original_link))
+        return HOST_URL + link.short
+    else:
+        return jsonify({'original_link': 'Обязательное поле'}), 400
 
 
-@app.route('/create/')
-def create():
-    link = db.create_link(models.Link(original='test2.com'))
-    print(link)
-    data = dict(link)
-
-    return data
+@app.route('/<short>/', methods=['GET'])
+def get_link(short: str):
+    link = db.get_link_by_short(short)
+    if link:
+        return redirect(link.original)
+    else:
+        return 'Ссылка не найдена', 404
 
 
 if __name__ == '__main__':

@@ -17,6 +17,12 @@ class Link(BaseModel):
     short: str
 
     def __init__(self, *args, **kwargs):
+        if args and type(args[0]) is list:
+            kwargs['id'] = args[0][0]
+            kwargs['original'] = args[0][1]
+            kwargs['short'] = args[0][2]
+            args = []
+
         if not kwargs.get('id'):
             kwargs['id'] = uuid.uuid4().hex
         if not kwargs.get('short'):
