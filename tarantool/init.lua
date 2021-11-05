@@ -2,9 +2,9 @@
 
 
 local function init()
-    link = box.schema.space.create('link1')
+    link = box.schema.space.create('link')
     link:format({
-             {name = 'id', type = 'unsigned'},
+             {name = 'id', type = 'string'},
              {name = 'original', type = 'string'},
              {name = 'short', type = 'string'}
     })
@@ -14,14 +14,10 @@ local function init()
              parts = {'id'}
              })
 
-    link:create_index('original_index', {
-             type = 'hash',
-             parts = {'original'}
-             })
-
     link:create_index('short_index', {
              type = 'hash',
-             parts = {'short'}
+             parts = {'short'},
+             unique = true
              })
 end
 
