@@ -1,7 +1,11 @@
+import base64
+from io import BytesIO
+
 from flask import Flask, request, redirect, render_template
 from flask import jsonify
 import models
 from db import Store
+import qrcode
 
 app = Flask(__name__)
 
@@ -16,7 +20,14 @@ def set_link():
     if request_data and request_data.get('original_link'):
         original_link = request_data['original_link']
         link = db.create_link(models.Link(original=original_link))
-        return jsonify(HOST_URL + link.short)
+        short_link = HOST_URL + link.short
+
+        image = qrcode.make(short_link)
+        buffered = BytesIO()
+        image.save(buffered, format='JPEG')
+        img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        return jsonify({'short_link': short_link, 'qr_code': img_base64})
     else:
         return jsonify({'original_link': 'Обязательное поле'}), 400
 

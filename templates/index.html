@@ -22,9 +22,14 @@
             <button onclick="get_short_link()" class="btn btn-primary">Сократить</button>
         </div>
 
-        <div id="result" class="mt-3" style="visibility: hidden">
+        <div id="result" class="mt-4" style="visibility: hidden">
             <h2>Результат</h2>
-            Сокращенная ссылка: <a target="_blank" id="short_link" href=""></a>
+            <div>
+                Сокращенная ссылка: <a target="_blank" id="short_link" href=""></a>
+            </div>
+            <div>
+                <img style="max-height: 250px" id="qr_code" src="" alt="QR код сокращенной ссылки">
+            </div>
         </div>
 
     </div>
@@ -51,13 +56,16 @@
             body: JSON.stringify({'original_link': original_link})
         });
 
-
-        let result = await response.json();
+        let result = {'short_link': '', 'qr_code': ''}
+        result = await response.json();
+        console.log(result)
         let short_link_element = document.getElementById('short_link')
-        short_link_element.setAttribute('href', result)
-        short_link_element.innerText = result
+        short_link_element.setAttribute('href', result.short_link)
+        short_link_element.innerText = result.short_link
 
         document.getElementById('result').style.visibility = "visible";
+
+        document.getElementById('qr_code').src = `data:image/png;base64,${result.qr_code}`;
 
     }
 
