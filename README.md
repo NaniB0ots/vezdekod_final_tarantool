@@ -41,3 +41,7 @@ Response [200]:
 Response [302]:
 
 Перенаправление на соответствующую оригинальную ссылку
+
+## Web интерфейс
+![image](https://user-images.githubusercontent.com/56492378/140519544-587d0f94-274a-4514-9470-0545bf661c71.png)
+
