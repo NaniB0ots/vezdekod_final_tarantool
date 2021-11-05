@@ -11,7 +11,7 @@ services:
     ports:
       - '8081:8081'
     environment:
-      - HOST_URL=test.com
+      - HOST_URL=http://tarantool.698865-cs07173.tmweb.ru/
       - DB_URL=tarantool
       - DB_PORT=3301
     depends_on:
